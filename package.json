@@ -1,0 +1,26 @@
+{
+  "name": "provadaw1",
+  "version": "1.0.0",
+  "description": "prova daw 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FelipeJhordan/provadaw1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FelipeJhordan/provadaw1/issues"
+  },
+  "homepage": "https://github.com/FelipeJhordan/provadaw1#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "jquery": "^3.6.0",
+    "nodemon": "^2.0.12",
+    "sequelize": "^6.6.5"
+  }
+}
