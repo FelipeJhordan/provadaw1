@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require("sequelize")
-const db = require("./../config/sequelize")
+const db = require("../../config/sequelize")
 const sequelize = db.sequelize
 class User extends Model { }
 
@@ -11,8 +11,7 @@ User.init({
         type: DataTypes.STRING
     },
     email: {
-        type: DataTypes.STRING,
-        validate: {isEmail: true}
+        type: DataTypes.STRING
     },
     whatsapp: {
         type: DataTypes.STRING,

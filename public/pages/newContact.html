@@ -23,7 +23,9 @@
             <label for="whatsapp">Whatsapp</label>
             <input type="text" id="whatsapp" name="whatsapp" value="" >
 
-            <button  type="button">Cadastrar</button>
+            <button  type="submit">Cadastrar</button>
+            <a  class="btn-back" href="/" >Voltar</a>
+
         </form>
     </main>
     <footer><span><i>Criado por -> Felipe Jhordan Maciel Alves 🤠</i></span> Data: <span id="data"></span></footer>
@@ -32,9 +34,14 @@
     <script>
 
         $(function () {
+
         const semana = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
         let actualDate = new Date()
+
         $("#data").text(`${semana[actualDate.getDay()]}, ${actualDate.getDate() + 1}/${actualDate.getMonth()+1}/${actualDate.getFullYear()}`)
+        
+        useParams()
+
         $("button").on("click", (event) => {
               let name = $("#name")
               let email = $("#email")
@@ -71,7 +78,15 @@
             
         })
 
-
+        let useParams = () => {
+                let params = sessionStorage.getItem("params")
+                if(params) {
+                    let formValues = JSON.parse(params)
+                    $("#name").val(formValues.name)
+                    $("#nickname").val(formValues.nickname)
+                    sessionStorage.removeItem("params")
+                }
+            }
 
     </script>
 </body>
