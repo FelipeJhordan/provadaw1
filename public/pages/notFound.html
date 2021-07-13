@@ -27,7 +27,7 @@
          $(function () {
                 const semana = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
                 let actualDate = new Date() 
-                $("#data").text(`${semana[actualDate.getDay()]}, ${actualDate.getDate() + 1}/${actualDate.getMonth() + 1}/${actualDate.getFullYear()}`)
+                $("#data").text(`${semana[actualDate.getDay()]}, ${actualDate.getDate()}/${actualDate.getMonth() + 1}/${actualDate.getFullYear()}`)
 
                 $.get("/contacts/last")
                  .done(function (contact) {

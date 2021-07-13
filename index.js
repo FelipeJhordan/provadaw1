@@ -13,5 +13,5 @@ app.use(routes)
 // })
 
 var server = app.listen(3000, () => {
-    console.log("Servidor está funcionando na porta" + server.address + " no host " + server.address().address)
+    console.log("Servidor está funcionando na porta " + server.address().port + " no host " + server.address().address)
 })
