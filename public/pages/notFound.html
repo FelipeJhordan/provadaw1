@@ -12,12 +12,13 @@
 <body>
     <header>
         <h1>Gerenciador de agenda</h1>
+        <span class="last-contact"></span>
     </header>
-    <main id="main-form">
+    <main id="main-form" style="position: relative;">
         
         <h3> <span style="margin-left: 2rem;">Não existe</span> </h3>
         <br>
-        <a class="btn-back" href="/">Voltar</a>
+        <a class="btn-back" style="position: relative;" href="/">Voltar</a>
     </main>
     <footer><span><i>Criado por -> Felipe Jhordan Maciel Alves 🤠</i></span> Data: <span id="data"></span></footer>
 
@@ -28,6 +29,14 @@
                 let actualDate = new Date() 
                 $("#data").text(`${semana[actualDate.getDay()]}, ${actualDate.getDate() + 1}/${actualDate.getMonth() + 1}/${actualDate.getFullYear()}`)
 
+                $.get("/contacts/last")
+                 .done(function (contact) {
+                     $(".last-contact").html("<span style='padding-bottom: 4px'>Ultimo Contato Adicionado</span><span style='text-align:center;padding-bottom: 4px'> "+
+                            contact.name+"</span><span style='text-align:center'>"+ contact.createdAt.substring(0, 10).split('-').reverse().join('/')+"</span>")
+                 })
+                 .fail(function (jqXHR, textStatus, msg) {
+                     
+                 });
                     }
                 )
     </script>

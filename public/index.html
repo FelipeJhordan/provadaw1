@@ -5,13 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./../css/main.css">
-    <link rel="stylesheet" href="./../css/table.css">
     <title>Página Inicial</title>
 </head>
 
 <body>
     <header>
         <h1>Gerenciador de agenda</h1>
+        <span class="last-contact"></span>
     </header>
     <main style="margin: 0 1rem 0 1rem; padding: 1rem 3rem 0 3rem;">
         <form action="">
@@ -19,8 +19,8 @@
             <input type="text" name="name" id="name">
             <label for="nickname" style="margin-left: 1em;">Apelido:</label>
             <input type="text" name="nickname" id="nickname">
-            <button onclick="toInclude()" type="button">Incluir</button>
-            <button onclick="getContacts()" type="button">Pesquisar</button>
+            <button class="btn-add" onclick="toInclude()" type="button">Incluir</button>
+            <button class="btn-search" onclick="getContacts()" type="button">Pesquisar</button>
         </form>
         <div style="width: 100%;height:100%; overflow-y: scroll;margin-top: 1em;">
             <table style="width: 100%;">
@@ -46,12 +46,20 @@
                const semana = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
                let actualDate = new Date()
                $("#data").text(`${semana[actualDate.getDay()]}, ${actualDate.getDate() + 1}/${actualDate.getMonth() + 1}/${actualDate.getFullYear()}`)
-
+            
                getContacts()
+
+                $.get("/contacts/last")
+                .done(function (contact) {
+                    $(".last-contact").html("<span style='padding-bottom: 4px'>Ultimo Contato Adicionado</span><span style='text-align:center;padding-bottom: 4px'> " +
+                        contact.name + "</span><span style='text-align:center'>" + contact.createdAt.substring(0, 10).split('-').reverse().join('/') + "</span>")
+                })
+                .fail(function (jqXHR, textStatus, msg) {
+
+                });
             })
 
             let removeContact = (id) => {
-                console.log(id)
                 $.ajax({
                     url: "/contacts/remove",
                     method: 'DELETE',

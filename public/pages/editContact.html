@@ -12,6 +12,7 @@
 <body>
     <header>
         <h1>Gerenciador de agenda</h1>
+        <span class="last-contact"></span>
     </header>
     <main id="main-form">
         <h2>Editar Contato</h2>
@@ -26,7 +27,7 @@
             <label for="whatsapp">Whatsapp</label>
             <input type="text" id="whatsapp" name="whatsapp" value="">
 
-            <button type="button">Atualizar</button>
+            <button type="submit">Atualizar</button>
             <a class="btn-back" href="/">Voltar</a>
         </form>
     </main>
@@ -36,14 +37,24 @@
     <script>
 
         $(function () {
-             const semana = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
+            const semana = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
             let actualDate = new Date()
             $("#data").text(`${semana[actualDate.getDay()]}, ${actualDate.getDate() + 1}/${actualDate.getMonth() + 1}/${actualDate.getFullYear()}`)
+            
             let locationSplit = window.location.href.split("/")
-            console.log(locationSplit[locationSplit.length-2])
+
+            $.get("/contacts/last")
+            .done(function (contact) {
+                $(".last-contact").html("<span style='padding-bottom: 4px'>Ultimo Contato Adicionado</span><span style='text-align:center;padding-bottom: 4px'> " +
+                    contact.name + "</span><span style='text-align:center'>" + contact.createdAt.substring(0, 10).split('-').reverse().join('/') + "</span>")
+            })
+            .fail(function (jqXHR, textStatus, msg) {
+
+            });
+
+            
              $.get(("/contact/"+ locationSplit[locationSplit.length - 2]))
                 .done(function (contact) {
-                    console.log(contact)
                      $("#name").val(contact.name)
                      $("#email").val(contact.email)
                      $("#nickname").val(contact.nickname)
@@ -53,28 +64,37 @@
                 .fail(function (jqXHR, textStatus, msg) {
                     alert(msg);
                 });
+
             $("button").on("click", (event) => {
                 let name = $("#name")
                 let email = $("#email")
-                if (email.val() == "" || name.val() == "") {
-                    if (email.val() == "") alert("Email é obrigatório")
-                    else alert("Nome é obrigatório")
-                    return
+                var isvalidate = $("form")[0].checkValidity();
+                if(isvalidate) {
+                    if (email.val() == "" || name.val() == "") {
+                        if (email.val() == "") alert("Email é obrigatório")
+                        else alert("Nome é obrigatório")
+                        return
+                    }
+                    let fields = returnFields()
+                    if (fields?.length != 0) {
+                        send(fields)
+                    }
                 }
-                let fields = returnFields()
-                if (fields?.length != 0) {
-                    send(fields)
-                }
+                
             })
         })
         let send = ((fields) => {
-            $.post("/contacts/edit", { ...fields })
-                .done(function (msg) {
+            $.ajax({
+                url: "/contacts/edit",
+                method: 'PUT',
+                data: { ...fields },
+                success: function (result) {
                     alert("Usuário atualizado com sucesso")
-                })
-                .fail(function (jqXHR, textStatus, msg) {
-                    alert(msg);
-                });
+                },
+                error: function (request, msg, error) {
+                    alert(msg)
+                }
+            });
         })
         let returnFields = (() => {
             let x = []
@@ -84,7 +104,6 @@
                     x[$(elemento).attr('id')] = $(elemento).val();
                 }
             })
-            console.log(x)
             return x
         })
 

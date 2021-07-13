@@ -12,6 +12,7 @@ header {
     height: 15%;
     padding-left: 2rem;
     font-family: monospace;
+    position: relative;
 }
 
 main {
@@ -72,6 +73,19 @@ table{
 #main-form input, #main-form label  {
     width: 75%;
     margin-left: 25%;
+}
+
+#main-form label {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#main-form input {
+    margin-bottom: 0.6rem;
+}
+
+#main-form h2 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #333;
 }
 
 .wrapper{
@@ -165,7 +179,7 @@ td.medium-column {
 
 #main-form .btn-back{
     background-color: #1e79b6;
-    right: 6rem;
+    right: 5rem;
     padding-left: 1rem;
     padding-top: 7px;
     padding-bottom: 7px;
@@ -184,3 +198,37 @@ td.medium-column {
 }
 
 
+
+
+.btn-search {
+    background-color: #455;
+    border: 1px solid #455;
+    color: white;
+    border-radius: 2px;
+}
+
+.btn-search:hover {
+    background-color: #455b;
+    color: #eee;
+}
+
+.btn-add {
+    background-color: #bc3b69;
+    border: 1px solid #bc3b69;
+    color: white;
+    border-radius: 2px;
+}
+
+.btn-add:hover {
+    background-color: #bc3b69bb;
+    color: #eee;
+}
+
+.last-contact {
+    position: absolute;
+    right: 0.4rem;
+    top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2em;
+}

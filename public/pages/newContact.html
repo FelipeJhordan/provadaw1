@@ -10,6 +10,7 @@
 <body>
     <header>
         <h1>Gerenciador de agenda</h1>
+        <span class="last-contact"></span>
     </header>
     <main id="main-form">
         <h2>Adicionar Contato</h2>
@@ -39,20 +40,26 @@
         let actualDate = new Date()
 
         $("#data").text(`${semana[actualDate.getDay()]}, ${actualDate.getDate() + 1}/${actualDate.getMonth()+1}/${actualDate.getFullYear()}`)
+        getLast()
+
         
+
         useParams()
 
         $("button").on("click", (event) => {
               let name = $("#name")
               let email = $("#email")
-              if(email.val()  == ""|| name.val()  == "") {
-                  if(email.val() == "") alert("Email é obrigatório")
-                  else alert("Nome é obrigatório")
-                  return
-              }
-              let fields = returnFields()
-              if(fields?.length != 0) {
-                  send(fields)
+              var isvalidate = $("form")[0].checkValidity();
+              if(isvalidate) {
+                  if (email.val() == "" || name.val() == "") {
+                      if (email.val() == "") alert("Email é obrigatório")
+                      else alert("Nome é obrigatório")
+                      return
+                  }
+                  let fields = returnFields()
+                  if (fields?.length != 0) {
+                      send(fields)
+                  }
               }
         })
     })
@@ -60,6 +67,7 @@
          $.post("/contacts/save", { ...fields })
             .done(function (msg) {
                 alert("Usuário cadastrado com sucesso")
+                getLast()
             })
             .fail(function (jqXHR, textStatus, msg) {
                 alert(msg);
@@ -73,7 +81,6 @@
                     x[$(elemento).attr('id')] = $(elemento).val();
                 }
             })
-            console.log(x)
             return x
             
         })
@@ -87,7 +94,16 @@
                     sessionStorage.removeItem("params")
                 }
             }
+        let getLast = () => {
+                $.get("/contacts/last")
+                    .done(function (contact) {
+                        $(".last-contact").html("<span style='padding-bottom: 4px'>Ultimo Contato Adicionado</span><span style='text-align:center;padding-bottom: 4px'> " +
+                            contact.name + "</span><span style='text-align:center'>" + contact.createdAt.substring(0, 10).split('-').reverse().join('/') + "</span>")
+                    })
+                    .fail(function (jqXHR, textStatus, msg) {
 
+                    });
+            }
     </script>
 </body>
 </html>

@@ -4,27 +4,23 @@ const Contact = require("../models/contact/contact")
 const { Op } = db.Sequelize
 
 exports.create = (req, res) => {
-    console.log(req.body)
     Contact.create({...req.body}).then((post) => {
         res.send(post)
     }).catch((err) => {
-        console.log("Erro" + err)
+        res.send(err)
     })
 }
 
 exports.list = async (req, res) => {
     try {
         let query = {}
-        console.log(query)
         if (req.body.name !== '') query["name"] =  {[Op.like]: '%' + req.body.name + '%'}
         if (req.body.nickname !== '') query["nickname"] = { [Op.like]: '%' + req.body.nickname + '%'}
-        console.log(req.body.name !== '')
          Contact.findAll({ where: query }).then(posts => {
             res.json(posts)
         }
         )
     } catch( e) {
-        console.log(e)
         res.send(e)
     }
 }
@@ -48,8 +44,6 @@ exports.update = (req, res) => {
 }
 
 exports.remove = (req, res) => {
-    console.log(req.body)
-    console.log("entr")
     Contact.destroy({
         where: {
             id: req.body.id
@@ -61,4 +55,10 @@ exports.remove = (req, res) => {
 
 exports.findById = async (id) => {
     return await Contact.findByPk(id)
+}
+
+exports.findLast =  (req, res) => {
+    Contact.findOne({ order: [["createdAt", "desc" ]] })
+        .then( (contact) => { res.send({name: contact.name, createdAt: contact.createdAt})})
+        .catch( (e) =>  res.send(e))
 }
