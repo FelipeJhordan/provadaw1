@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Novo Contato</title>
+</head>
+<body>
+    <header>
+        <h1>Gerenciador de agenda</h1>
+    </header>
+    <main id="main-form">
+        <h2>Adicionar Contato</h2>
+        <form id="form"  action="javascript:0">
+            <label for="name">Nome</label>
+            <input type="text" id="name" name="name" value=""  required >
+            <label for="nickname">Apelido</label>
+            <input type="text" id="nickname" name="nickname" value="">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value=""  required >
+            <label for="whatsapp">Whatsapp</label>
+            <input type="text" id="whatsapp" name="whatsapp" value="" >
+
+            <button  type="button">Cadastrar</button>
+        </form>
+    </main>
+    <footer><span><i>Criado por -> Felipe Jhordan Maciel Alves 🤠</i></span> Data: <span id="data"></span></footer>
+
+    <script src="../js/jquery.min.js"></script>
+    <script>
+
+        $(function () {
+        const semana = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"]
+        let actualDate = new Date()
+        $("#data").text(`${semana[actualDate.getDay()]}, ${actualDate.getDate() + 1}/${actualDate.getMonth()+1}/${actualDate.getFullYear()}`)
+        $("button").on("click", (event) => {
+              let name = $("#name")
+              let email = $("#email")
+              if(email.val()  == ""|| name.val()  == "") {
+                  if(email.val() == "") alert("Email é obrigatório")
+                  else alert("Nome é obrigatório")
+                  return
+              }
+              let fields = returnFields()
+              if(fields?.length != 0) {
+                  send(fields)
+              }
+        })
+    })
+    let send = ( (fields) => {
+         $.post("/contacts/save", { ...fields })
+            .done(function (msg) {
+                alert("Usuário cadastrado com sucesso")
+            })
+            .fail(function (jqXHR, textStatus, msg) {
+                alert(msg);
+            });
+    })
+    let returnFields = (() => {
+            let x = []
+            $('#form input').each((index, elemento) => {
+                if ($(elemento).val().trim() != "") {
+                    x.length = x.length + 1
+                    x[$(elemento).attr('id')] = $(elemento).val();
+                }
+            })
+            console.log(x)
+            return x
+            
+        })
+
+
+
+    </script>
+</body>
+</html>
